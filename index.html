@@ -9,7 +9,27 @@
     <link href="style.css" rel="stylesheet">
   </head>
   <body>
-
+    <div id="vue-app">
+      <h1>{{greet('night')}}</h1>
+      <a :href="google">google</a>
+      <p>name: {{ name }}</p>
+      <button v-on:click="add_age()">add </button>
+      <p>{{age}}</p>
+      <p>{{agepp}}</p>
+      <input type="text" v-model="name"/>
+      <button v-on:click="toggle()"> toggle </button>
+      <p v-if="flag">んなぁ〜</p>
+      <p v-show="!flag">んなぁ〜んなぁ〜</p>
+      <table>
+        <tr>
+          <th>name</th><th>age</th>
+        </th>
+        <tr v-for="character in characters">
+          <td> {{character.name}} </td>
+          <td> {{character.age}} </td>
+        </tr>
+      </table>
+    </div>
     <script src="app.js"></script>
   </body>
 </html>
