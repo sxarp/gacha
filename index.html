@@ -3,15 +3,14 @@
   <head>
     <meta charset="utf-8">
     <title>
-      aaaa
+      コンプガチャ期待値計算機
     </title>
     <script src="https://unpkg.com/vue"></script>
     <link href="style.css" rel="stylesheet">
   </head>
   <body>
-    <div id="vue-app">
-      <h1>{{greet('night')}}</h1>
-      <a :href="google">google</a>
+    <div id="main">
+      <h1>アイテムをコンプリートするのに必要なガチャの回数の期待値を計算します </h1>
       <p>name: {{ name }}</p>
       <button v-on:click="add_age()">add </button>
       <p>{{age}}</p>
@@ -22,13 +21,17 @@
       <p v-show="!flag">んなぁ〜んなぁ〜</p>
       <table>
         <tr>
-          <th>name</th><th>age</th>
+          <th>カテゴリー</th><th>アイテム個数</th><th>アイテム個数</th>
         </th>
-        <tr v-for="character in characters">
-          <td> {{character.name}} </td>
-          <td> {{character.age}} </td>
+        <tr v-for="c in categories">
+          <td> <input type="text" v-model="c.category"/></td>
+          <td> <input type="number" v-model="c.number"/></td>
+          <td> <input type="number" v-model="c.probability"/></td>
         </tr>
       </table>
+      <template v-for="r in categories">
+        {{r}}
+      </template>
     </div>
     <script src="app.js"></script>
   </body>
