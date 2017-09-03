@@ -58,13 +58,13 @@ function probability_of_category(category){
 new Vue({
   el: '#main',
   data: {
-    categories: map([['SSR', 1, 0.02], ['レア', 2, 0.04], ['ハズレ', 9, 0.1]],
+    categories: map([['SSR', 1, 2], ['レア', 2, 4], ['ハズレ', 9, 10]],
       function(args){return create_category(args[0], args[1], args[2])}),
     result: 66.934832989
   },
   computed: {
     total_probability: function(){
-      return fold(map(this.categories, probability_of_category), sum);
+      return fold(map(this.categories, probability_of_category), sum)/100.0;
     },
     category_num: function(){
       return this.categories.length;
@@ -77,7 +77,7 @@ new Vue({
       return JSON.stringify(
         map(filter(this.categories,
           function(c){return probability_of_category(c) > 0;}),
-          function(c){return {number: Number(c.number), probability: Number(c.probability)}}
+          function(c){return {number: Number(c.number), probability: 0.01*Number(c.probability)}}
         ));
     },
     result_view: function(){

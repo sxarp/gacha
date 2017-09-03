@@ -19,7 +19,7 @@
           <tr v-for="c in categories">
             <td> <input type="text" v-model="c.category"/></td>
             <td> <input type="number" v-model="c.number"/></td>
-            <td> <input type="number" v-model="c.probability"/></td>
+            <td> <input type="number" v-model="c.probability"/>%</td>
           </tr>
       </table>
       <button v-on:click="add_category()"> +アイテムカテゴリを追加 </button>
