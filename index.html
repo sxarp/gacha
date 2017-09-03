@@ -5,28 +5,27 @@
     <title>
       コンプガチャ期待値計算機
     </title>
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://unpkg.com/vue"></script>
     <link href="style.css" rel="stylesheet">
   </head>
   <body>
     <div id="main">
-      <h1>アイテムをコンプリートするのに必要なガチャの回数の期待値を計算します </h1>
+      <h2>アイテムをコンプリートするのに必要なガチャの回数の期待値を計算します </h2>
       <table>
         <tr>
           <th>カテゴリー</th><th>アイテム個数</th><th>ドロップ確率</th>
-        </th>
-        <tr v-for="c in categories">
-          <td> <input type="text" v-model="c.category"/></td>
-          <td> <input type="number" v-model="c.number"/></td>
-          <td> <input type="number" v-model="c.probability"/></td>
-        </tr>
+          </th>
+          <tr v-for="c in categories">
+            <td> <input type="text" v-model="c.category"/></td>
+            <td> <input type="number" v-model="c.number"/></td>
+            <td> <input type="number" v-model="c.probability"/></td>
+          </tr>
       </table>
       <button v-on:click="add_category()"> +アイテムカテゴリを追加 </button>
       <div v-bind:class="is_total_one">トータル確率 = {{rounded_total(2)}}</div>
-      <p>計算結果: {{result}}回</p>
-      <template v-for="r in categories">
-        {{r}}
-      </template>
+      <button v-on:click="calculate()"> 計算！</button>
+      <p>計算結果: {{result_view}}回</p>
     </div>
     <script src="vue.js"></script>
   </body>
