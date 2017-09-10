@@ -18,26 +18,34 @@
       <table class="table">
         <thead>
           <tr>
-            <th class="col-md-1">カテゴリー</th>
+            <th class="col-md-1"></th>
+            <th class="col-md-2">カテゴリー</th>
             <th class="col-md-2">アイテム個数</th>
-            <th class="col-md-3">ドロップ確率(1アイテム)</th>
-            <th class="col-md-3">ドロップ確率(カテゴリ全体)</th>
+            <th class="col-md-2">ドロップ確率(1アイテム)</th>
+            <th class="col-md-2">ドロップ確率(カテゴリ全体)</th>
             <th class="col-md-1"></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="(c, index) in categories">
+            <td>
+              <button class="btn btn-default btn-xs" v-on:click="delete_category(index)"> - </button>
+            </td>
             <td> <input class="form-control" type="text" v-model="c.category"/></td>
             <td> <input class="form-control" type="number" v-model.number="c.number" min="1"/></td>
             <td> {{ c.probability/c.number }} %</td>
-            <td> <input class="form-control col-xs-2" type="number" v-model.number="c.probability" min="0"/>
+            <td> <input class="form-control col-xs-2" type="number" v-model.number="c.probability" min="0" max="100"/>
             </td>
             <td>%</td>
           </tr>
+          <tr>
+            <td>
+              <button class="btn btn-default btn-xs" v-on:click="add_category()"> + </button>
+            </td>
+          </tr>
         </tbody>
       </table>
-      <button class="btn btn-info" v-on:click="add_category()"> +アイテムカテゴリを追加 </button>
-      <h4 v-bind:class="is_total_one">トータル確率 = {{rounded_total(2)}}%</h4>
+      <h4 v-bind:class="is_total_one">トータル確率: {{rounded_total(2)}}%</h4>
 
       <button class="btn btn-info" v-on:click="calculate()" id="cal" :disabled="button_state.disabled"> {{ button_state.text }}</button>
       <h4>期待値: {{result_view}}回</h4>

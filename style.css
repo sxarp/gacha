@@ -1,5 +1,7 @@
 .exact {
+  display: none;
 }
+
 .normalized {
   color: red;
 }

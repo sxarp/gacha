@@ -114,7 +114,7 @@ new Vue({
       console.log(this.categories);
       console.log(this.categories_view);
     },
-    mounted: function(){ this.ready();},
+    delete_category: function(index){ this.categories.splice(index, 1);},
     calculate: function(){
       this.wait();
       this.result = '---------';
