@@ -65,7 +65,8 @@ new Vue({
   data: {
     categories: map([['SSR', 1, 2], ['レア', 2, 8], ['ハズレ', 9, 90]],
       function(args){return create_category(args[0], args[1], args[2]);}),
-    result: 66.934832989
+    result: 66.934832989,
+    button_state: {text: '計算する'}
   },
   computed: {
     total_probability: function(){
@@ -105,16 +106,18 @@ new Vue({
     normalize: function(){
       var total = this.total_probability/100.0;
       this.categories_map(function(c){
-        return create_category(c.category, c.number, c.probability/total);});
-    },
+        return create_category(c.category, c.number, c.probability/total);});},
+    ready: function(){this.button_state = {text: '計算する', disabled: false};},
+    wait: function(){this.button_state = {text: '計算中', disabled: true};},
     debug: function(){
       console.log('hell');
       console.log(this.categories);
       console.log(this.categories_view);
     },
+    mounted: function(){ this.ready();},
     calculate: function(){
-      $('#cal').prop('disabled', true);
-      this.result = '---------'
+      this.wait();
+      this.result = '---------';
 
       if(this.rounded_total(2) !== 1.0){
         this.normalize();
@@ -128,13 +131,16 @@ new Vue({
         data: this.json_data,
         contentType: 'application/json',
         success: function(result, status){
-          $('#cal').prop('disabled', false);
           console.log(status);
           console.log(result);
-          main.result = result;},
+          main.result = result;
+          main.ready();
+        },
         error: function() {
-          $('#cal').prop('disabled', false);
-          console.log('error');}});
+          alert('計算に失敗しました');
+          console.log('error');
+          main.ready();
+        }});
     }
   }
 });
