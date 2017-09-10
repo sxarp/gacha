@@ -1,5 +1,5 @@
-var api_endpoint = "http://localhost:8080";
-// var api_endpoint = "https://gacha-calculas.appspot.com";
+//var api_endpoint = "http://localhost:8080";
+var api_endpoint = "https://gacha-calculas.appspot.com";
 
 function foldl(array, init, fun) {
   var ret_val = init;
@@ -69,7 +69,6 @@ new Vue({
   },
   computed: {
     total_probability: function(){
-      console.log(map(this.categories, probability_of_category));
       return fold(map(this.categories, probability_of_category), sum);
     },
     category_num: function(){
@@ -77,17 +76,19 @@ new Vue({
     },
     is_total_one: function(){
       var total = this.rounded_total(2);
-      return {exact: (total===1), lower: (total<1), higher: (total>1)};
+      return {exact: (total===100), normalized: (total !== 100)};
     },
     json_data: function(){
       return JSON.stringify(
         map(filter(this.categories,
           function(c){return probability_of_category(c) > 0;}),
-          function(c){return {number: parseInt(c.number, 10), probability: 0.01*Number(c.probability)};}
+          function(c){return {number: parseInt(c.number, 10), probability: 0.01*Number(c.probability)/Number(c.number)};}
         ));
     },
     result_view: function(){
-      return myround(this.result, 3);
+      var result = this.result;
+      if(isNaN(result)){ return result;}
+      return myround(result, 3);
     }
   },
   methods: {
@@ -112,6 +113,9 @@ new Vue({
       console.log(this.categories_view);
     },
     calculate: function(){
+      $('#cal').prop('disabled', true);
+      this.result = '---------'
+
       if(this.rounded_total(2) !== 1.0){
         this.normalize();
       }
@@ -124,10 +128,13 @@ new Vue({
         data: this.json_data,
         contentType: 'application/json',
         success: function(result, status){
+          $('#cal').prop('disabled', false);
           console.log(status);
           console.log(result);
           main.result = result;},
-        error: function() { console.log('error'); }});
+        error: function() {
+          $('#cal').prop('disabled', false);
+          console.log('error');}});
     }
   }
 });
