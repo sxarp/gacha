@@ -1,8 +1,9 @@
-//var api_endpoint = "http://localhost:8080";
-var api_endpoint = "https://gacha-calculas.appspot.com";
+var api_endpoint = "http://localhost:8080";
+// var api_endpoint = "https://gacha-calculas.appspot.com";
 
 function foldl(array, init, fun) {
   var ret_val = init;
+  var i;
   for (i = 0; i < array.length; i++) { 
     ret_val = fun(ret_val, array[i]);
   }
@@ -39,7 +40,7 @@ function sum(a, b){
 }
 
 function myround(x, accuracy){
-  decimal = 10**accuracy;
+  var decimal = Math.pow(10, accuracy);
   return Math.round(x * decimal)/decimal;
 }
 
@@ -50,38 +51,43 @@ function ind(x){
 
 function create_category(category, number, probability) {
   return {category: category, number: number, probability: probability};
-};
+}
 function probability_of_category(category){
-  return category.number * category.probability;
+  return category.probability;
+}
+
+function probability_per_item(category){
+  return category.probability/category.number;
 }
 
 new Vue({
   el: '#main',
   data: {
-    categories: map([['SSR', 1, 2], ['レア', 2, 4], ['ハズレ', 9, 10]],
-      function(args){return create_category(args[0], args[1], args[2])}),
+    categories: map([['SSR', 1, 2], ['レア', 2, 8], ['ハズレ', 9, 90]],
+      function(args){return create_category(args[0], args[1], args[2]);}),
     result: 66.934832989
   },
   computed: {
     total_probability: function(){
-      return fold(map(this.categories, probability_of_category), sum)/100.0;
+      console.log(map(this.categories, probability_of_category));
+      return fold(map(this.categories, probability_of_category), sum);
     },
     category_num: function(){
       return this.categories.length;
     },
     is_total_one: function(){
       var total = this.rounded_total(2);
-      return {exact: (total==1), lower: (total<1), higher: (total>1)};
+      return {exact: (total===1), lower: (total<1), higher: (total>1)};
     },
     json_data: function(){
       return JSON.stringify(
         map(filter(this.categories,
           function(c){return probability_of_category(c) > 0;}),
-          function(c){return {number: Number(c.number), probability: 0.01*Number(c.probability)}}
+          function(c){return {number: parseInt(c.number, 10), probability: 0.01*Number(c.probability)};}
         ));
     },
     result_view: function(){
-      return myround(this.result, 3)
+      return myround(this.result, 3);
     }
   },
   methods: {
@@ -96,12 +102,17 @@ new Vue({
       this.categories = map(this.categories, fun);
     },
     normalize: function(){
-      var total = this.total_probability;
+      var total = this.total_probability/100.0;
       this.categories_map(function(c){
-        return create_category(c.category, c.number, c.probability/total);})
+        return create_category(c.category, c.number, c.probability/total);});
+    },
+    debug: function(){
+      console.log('hell');
+      console.log(this.categories);
+      console.log(this.categories_view);
     },
     calculate: function(){
-      if(this.rounded_total(2) != 1.0){
+      if(this.rounded_total(2) !== 1.0){
         this.normalize();
       }
       console.log('post!');
@@ -113,10 +124,10 @@ new Vue({
         data: this.json_data,
         contentType: 'application/json',
         success: function(result, status){
-          console.log(result)
+          console.log(status);
+          console.log(result);
           main.result = result;},
-        error: function() {         // HTTPエラー時
-          alert("Server Error. Pleasy try again later.");}});
+        error: function() { console.log('error'); }});
     }
   }
 });
