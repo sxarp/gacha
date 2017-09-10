@@ -7,31 +7,43 @@
     </title>
     <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <script src="https://unpkg.com/vue"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <link href="style.css" rel="stylesheet">
   </head>
   <body>
-    <div id="main">
+    <div id="main" class="container">
       <h2>アイテムをコンプリートするのに必要なガチャの回数の期待値を計算します </h2>
-      <table>
-        <tr>
-          <th>カテゴリー</th><th>アイテム個数</th><th>ドロップ確率(1アイテム)</th>
-          <th>ドロップ確率(カテゴリ全体)</th>
-        </tr>
-        <tr v-for="(c, index) in categories">
-          <td> <input type="text" v-model="c.category"/></td>
-          <td> <input type="number" v-model.number="c.number" min="1"/></td>
-          <td> {{ c.probability/c.number }} %</td>
-          <td> <input type="number" v-model.number="c.probability" min="0"/>%</td>
-        </tr>
+      <br>
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="col-md-1">カテゴリー</th>
+            <th class="col-md-2">アイテム個数</th>
+            <th class="col-md-3">ドロップ確率(1アイテム)</th>
+            <th class="col-md-3">ドロップ確率(カテゴリ全体)</th>
+            <th class="col-md-1"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(c, index) in categories">
+            <td> <input class="form-control" type="text" v-model="c.category"/></td>
+            <td> <input class="form-control" type="number" v-model.number="c.number" min="1"/></td>
+            <td> {{ c.probability/c.number }} %</td>
+            <td> <input class="form-control col-xs-2" type="number" v-model.number="c.probability" min="0"/>
+            </td>
+            <td>%</td>
+          </tr>
+        </tbody>
       </table>
-      <button v-on:click="add_category()"> +アイテムカテゴリを追加 </button>
-      <div v-bind:class="is_total_one">トータル確率 = {{rounded_total(2)}}%</div>
+      <button class="btn btn-info" v-on:click="add_category()"> +アイテムカテゴリを追加 </button>
+      <h4 v-bind:class="is_total_one">トータル確率 = {{rounded_total(2)}}%</h4>
 
-      <button v-on:click="calculate()" id="cal" :disabled="button_state.disabled"> {{ button_state.text }}</button>
-      <p>計算結果: {{result_view}}回</p>
+      <button class="btn btn-info" v-on:click="calculate()" id="cal" :disabled="button_state.disabled"> {{ button_state.text }}</button>
+      <h4>期待値: {{result_view}}回</h4>
       <button v-on:click="debug()" style="display: none">デバッグ</button>
+      <a href="https://github.com/sxarp/gacha-calculas">ソースコード</a>
     </div>
-    <a href="https://github.com/sxarp/gacha-calculas">ソースコード</a>
     <script src="vue.js"></script>
   </body>
 </html>
