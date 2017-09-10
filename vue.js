@@ -93,7 +93,7 @@ new Vue({
   methods: {
     add_category: function(){
       this.categories = this.categories.concat(
-        create_category("カテゴリ"+this.category_num, 0, 0.0));
+        create_category("カテゴリ"+this.category_num, 1, 0.0));
     },
     rounded_total: function(decimal){
       return myround(this.total_probability, decimal);

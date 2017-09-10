@@ -19,9 +19,9 @@
         </tr>
         <tr v-for="(c, index) in categories">
           <td> <input type="text" v-model="c.category"/></td>
-          <td> <input type="number" v-model.number="c.number"/></td>
+          <td> <input type="number" v-model.number="c.number" min="1"/></td>
           <td> {{ c.probability/c.number }} %</td>
-          <td> <input type="number" v-model.number="c.probability"/>%</td>
+          <td> <input type="number" v-model.number="c.probability" min="0"/>%</td>
         </tr>
       </table>
       <button v-on:click="add_category()"> +アイテムカテゴリを追加 </button>
